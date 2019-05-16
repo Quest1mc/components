@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import SeasonDisplay from './SeasonDisplay'
+import Loader from "./Loader";
 
 // super must be called to pull props from React.Component
 // we use null when we know its an unknown number!
@@ -37,25 +39,33 @@ class App extends React.Component{
             }
           );
         }
+renderContent(){
+    if ( this.state.errorMessage && !this.state.lat){
+        return (<div>Error: {this.state.errorMessage}</div>);
+    }
+    else if (this.state.lat && !this.state.errorMessage){
+        return <SeasonDisplay  lat= {this.state.lat} />;
+    }
+    else {
+        return <Loader message = "Please accept location request"/>;
+    }
+}
+
+
+
 
     //React says you MUST define render
     render(){
-        if ( this.state.errorMessage && !this.state.lat){
-            return (<div>Error: {this.state.errorMessage}</div>);
-        }
-        else if (this.state.lat && !this.state.errorMessage){
-            return (<div>
-                Latitude:{this.state.lat}
+      return ( 
+            <div className="border red">
+            {this.renderContent()}
             </div>
-            );
-        }
-        else {
-            return (<div>Loading...</div>)
-        }
+      ) 
+    };
 
         
     }
    
-}
+
 
 ReactDOM.render(<App />, document.querySelector("#root"));
